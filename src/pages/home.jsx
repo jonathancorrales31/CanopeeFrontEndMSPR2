@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
-import Hero from "../assets/imageaccueil.jpg"
-import Cordiste from "../assets/cordiste.jpg"
-import Jardin2 from "../assets/jardin2.jpg"
-import Jardin3 from "../assets/jardin3.jpg"
+
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Carousel from "../components/carousel";
@@ -12,17 +9,34 @@ import Carousel from "../components/carousel";
 
 export default function Home() {
 
-  const images = [Hero, Cordiste, Jardin2, Jardin3];
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [images, setImages] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+
   useEffect(() => {
+
+  if (images.length === 0) return;
+
   const interval = setInterval(() => {
     setCurrentIndex((prev) =>
       prev === images.length - 1 ? 0 : prev + 1
     );
-  }, 4000); 
+  }, 4000);
 
   return () => clearInterval(interval);
+
+}, [images]);
+
+  useEffect(() => {
+  fetch("http://127.0.0.1:8000/api/images?type=Slider&order[ordreAffichage]=asc")
+    .then(response => response.json())
+    .then(data => {
+      setImages(data.member);
+    });
 }, []);
+if (images.length === 0) {
+  return <p>Chargement...</p>;
+}
+
 function nextImage() {
   setCurrentIndex((prev) =>
     prev === images.length - 1 ? 0 : prev + 1
@@ -42,7 +56,13 @@ function prevImage() {
       <div className="slider-card home-slider">
         <button onClick={prevImage}>⟨</button>
 
-        <img src={images[currentIndex]} alt="slider d'images de jardin et de cordistes" />
+        {images[currentIndex] && (
+  <img
+  src={`http://127.0.0.1:8000/${images[currentIndex].url}`}
+  alt={images[currentIndex].description}
+  
+/>
+)}
 
         <button onClick={nextImage}>⟩</button>
         <Link className="btn-overlay" to="/services">Découvrir nos prestations</Link>
