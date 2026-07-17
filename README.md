@@ -1,18 +1,45 @@
-# React + Vite
+# Canopée - Frontend MSPR2
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Présentation
 
-Currently, two official plugins are available:
+Interface frontend du projet Canopée réalisée avec React.
+Cette version récupère les données dynamiques depuis l'API Symfony du backoffice.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Technologies
 
-## React Compiler
+- React
+- Vite
+- React Router
+- CSS
+- Axios (si utilisé)
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Installation
 
-Note: This will impact Vite dev & build performances.
+Cloner le repository :
 
-## Expanding the ESLint configuration
+```bash
+git clone https://github.com/jonathancorrales31/CanopeeFrontEndMSPR2.git
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Accéder au dossier :
+
+cd CanopeeFrontEndMSPR2
+
+Installer les dépendances :
+
+npm install
+Lancement
+
+Lancer le serveur de développement :
+
+npm run dev
+
+Le site sera accessible sur :
+
+http://localhost:5173
+
+Structure
+src/
+ ├── components/
+ ├── pages/
+ ├── services/
+ └── assets/
