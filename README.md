@@ -11,7 +11,7 @@ Cette version récupère les données dynamiques depuis l'API Symfony du backoff
 - Vite
 - React Router
 - CSS
-- Axios (si utilisé)
+
 
 ## Installation
 
