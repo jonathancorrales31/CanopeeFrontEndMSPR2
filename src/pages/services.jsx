@@ -1,25 +1,10 @@
-import Conception from "../assets/conception.jpg"
-import Maintenance from "../assets/maintenance.jpg"
-import Trimming from "../assets/trimming.jpg"
-import TreeFelling from "../assets/tree-felling.jpg"
-import Composting from "../assets/composting.jpg"
-import Garden1 from "../assets/carousel1.jpg"
-import Garden2 from "../assets/carousel2.jpg"
-import Garden3 from "../assets/Carousel3.jpg"
-import Maintenance1 from "../assets/maintenance1.jpg"
-import Maintenance2 from "../assets/maintenance2.jpg"
-import Maintenance3 from "../assets/maintenance3.jpg"
-import Trimming1 from "../assets/trimming1.jpg"
-import Trimming2 from "../assets/trimming2.jpg"
-import Trimming3 from "../assets/trimming3.jpg"
-import TreeFelling1 from "../assets/tree-felling1.jpg"
-import TreeFelling2 from "../assets/tree-felling2.jpg"
-import TreeFelling3 from "../assets/tree-felling3.jpg"
-import Composting1 from "../assets/composting1.jpg"
-import Composting2 from "../assets/composting2.jpg"
-import Composting3 from "../assets/composting3.jpg"
+
+
+
+
+
 import Modal from "../components/modal.jsx"
-import { useState } from "react"
+import { useState, useEffect } from "react";
 
 
 
@@ -33,8 +18,37 @@ export default function Services() {
 const [isOpen, setIsOpen] = useState(false);
 const [images, setImages] = useState([]);
 const [currentIndex, setCurrentIndex] = useState(0);
+const [carouselImages, setCarouselImages] = useState([]);
+const [modalImages, setModalImages] = useState([]);
+
+  const [prestationImages, setPrestationImages] = useState([]);
+
+useEffect(() => {
+  fetch(
+    "http://127.0.0.1:8000/api/images?type=Prestation&order%5BordreAffichage%5D=asc"
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      setPrestationImages(data.member);
+    });
+}, []);
+
+ useEffect(() => {
+
+  
+
+
+  fetch("http://127.0.0.1:8000/api/images?type=PrestationModale&order%5BordreAffichage%5D=asc")
+    .then(response => response.json())
+    .then(data => {
+      setModalImages(data.member);
+    });
+
+}, []);
+
 
 function openModal(imagesArray) {
+  console.log("Images envoyées à la modale :", imagesArray);
   setImages(imagesArray);
   setCurrentIndex(0);
   setIsOpen(true);
@@ -50,7 +64,11 @@ function prevImage() {
     prev === 0 ? images.length - 1 : prev - 1
   );
 }
-
+function getImagesByPrefix(prefix) {
+  return modalImages
+    .filter(image => image.url.includes(prefix))
+    .sort((a, b) => a.ordreAffichage - b.ordreAffichage);
+}
 
   return (
    
@@ -61,48 +79,82 @@ function prevImage() {
       <div className="services-wrapper">
 
         <div className="service-card-1">
-          <img src={Conception} className="conception" alt="Un beau jardin"/>
+          
+        {prestationImages[0] && (
+  <img
+    src={`http://127.0.0.1:8000/${prestationImages[0].url}`}
+    alt={prestationImages[0].description}
+    className="conception"
+  />
+)}        
+
           <h2>Conception et réalisation<br/>d'espaces verts </h2>
 
-          <button onClick={() => openModal([Garden1, Garden2, Garden3])}>
-            voir réalisations
-          </button>
+      <button onClick={() => openModal(getImagesByPrefix("carousel"))}>
+  voir réalisations
+</button>
         </div>
 
         <div className="service-card-2">
-          <img src={Maintenance} className="maintenance" alt="Un homme passant le rotofil"/>
+         {prestationImages[1] && (
+  <img
+    src={`http://127.0.0.1:8000/${prestationImages[1].url}`}
+    alt={prestationImages[1].description}
+    className="maintenance"
+  />
+)}
           <h2>Entretien des espaces verts</h2>
 
-          <button onClick={() => openModal([Maintenance1, Maintenance2, Maintenance3])}>
-            voir réalisations
-          </button>
+          <button onClick={() => openModal(getImagesByPrefix("maintenance"))}>
+  voir réalisations
+</button>
         </div>
 
         <div className="service-card-3">
-          <img src={Trimming} className="trimming" alt="Un homme taillant une haie"/>
+          {prestationImages[2] && (
+  <img
+    src={`http://127.0.0.1:8000/${prestationImages[2].url}`}
+    alt={prestationImages[2].description}
+    className="trimming"
+  />
+)}
           <h2>Taille des haies</h2>
 
-          <button onClick={() => openModal([Trimming1, Trimming2, Trimming3])}>
-            voir réalisations
-          </button>
+        
+<button onClick={() => openModal(getImagesByPrefix("trimming"))}>
+  voir réalisations
+</button>
         </div>
 
         <div className="service-card-4 bottom">
-          <img src={TreeFelling} className="tree-felling" alt="un homme élaguant un arbre devant une maison"/>
+          {prestationImages[3] && (
+  <img
+    src={`http://127.0.0.1:8000/${prestationImages[3].url}`}
+    alt={prestationImages[3].description}
+    className="tree-felling"
+  />
+)}
           <h2>Élagage et abattage d’arbres</h2>
 
-          <button onClick={() => openModal([TreeFelling1, TreeFelling2, TreeFelling3])}>
-            voir réalisations
-          </button>
+       
+<button onClick={() => openModal(getImagesByPrefix("tree-felling"))}>
+  voir réalisations
+</button>
         </div>
 
         <div className="service-card-5 bottom">
-          <img src={Composting} className="composting" alt="Des mains tenant du terreau"/>
+         {prestationImages[4] && (
+  <img
+    src={`http://127.0.0.1:8000/${prestationImages[4].url}`}
+    alt={prestationImages[4].description}
+    className="composting"
+  />
+)}
           <h2>Valorisation des déchets verts<br/>(Compostage)</h2>
 
-          <button onClick={() => openModal([Composting1, Composting2, Composting3])}>
-            voir réalisations
-          </button>
+          <button onClick={() => openModal(getImagesByPrefix("composting"))}>
+  voir réalisations
+</button>
         </div>
 
       </div>
@@ -113,7 +165,10 @@ function prevImage() {
         <div className="slider">
           <button onClick={prevImage}>⬅</button>
 
-          <img src={images[currentIndex]} alt="" />
+          <img
+            src={`http://127.0.0.1:8000/${images[currentIndex].url}`}
+            alt={images[currentIndex].description}
+          />
 
           <button onClick={nextImage}>➡</button>
         </div>

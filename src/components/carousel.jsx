@@ -1,22 +1,21 @@
 import { useState } from "react";
-import Carousel1 from "../assets/carousel1.jpg"
-import Carousel2 from "../assets/carousel2.jpg"
-import Carousel3 from "../assets/carousel3.jpg"
-import Carousel4 from "../assets/carousel4.jpg"
-import Carousel5 from "../assets/carousel5.jpg"
-import Carousel6 from "../assets/carousel6.jpg"
+import { useEffect } from "react";
 
-const images = [
-  Carousel1,
-  Carousel2,
-  Carousel3,
-  Carousel4,
-  Carousel5,
-  Carousel6,
-];
+
+
+
  
 
 export default function Carousel() {
+  const [images, setImages] = useState([]);
+useEffect(() => {
+
+  fetch("http://127.0.0.1:8000/api/images?type=Carousel&order[ordreAffichage]=asc")
+    .then(response => response.json())
+    .then(data => {
+  setImages(data.member);
+});
+  }, []);
   const [index, setIndex] = useState(0);
   // const visible = 3;
   const visible = window.innerWidth <= 1000 ? 1 : 3;
@@ -33,12 +32,18 @@ export default function Carousel() {
 
   // on crée les 3 images visibles
   const getVisibleImages = () => {
-    let result = [];
-    for (let i = 0; i < visible; i++) {
-      result.push(images[(index + i) % images.length]);
-    }
-    return result;
-  };
+  if (images.length === 0) {
+    return [];
+  }
+
+  let result = [];
+
+  for (let i = 0; i < visible; i++) {
+    result.push(images[(index + i) % images.length]);
+  }
+
+  return result;
+};
 
   return (
     <div className="carousel-wrapper">
@@ -46,8 +51,13 @@ export default function Carousel() {
 
       <div className="carousel-window">
         <div className="carousel-track">
-          {getVisibleImages().map((img, i) => (
-            <img key={i} src={img} alt="images des dernières realisations, beaux jardins et espaces verts bien entretenus" />
+          
+          {getVisibleImages().map((image) => (
+            <img
+              key={image.id}
+              src={`http://127.0.0.1:8000/${image.url}`}
+              alt={image.description}
+            />
           ))}
         </div>
       </div>

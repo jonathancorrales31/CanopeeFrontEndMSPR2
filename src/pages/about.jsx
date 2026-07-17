@@ -1,34 +1,109 @@
-import ImageAboutUs from "../assets/bob-et-tom.png"
-import Bob from "../assets/bob.png"
-import Tom from "../assets/tom.png"
+
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+
 
 export default function About() {
+
+  
+  const [coverImage, setCoverImage] = useState(null);
+  const [bioImages, setBioImages] = useState([]);
+  const [textes, setTextes] = useState([]);
+
+useEffect(() => {
+  fetch("http://127.0.0.1:8000/api/images?type=Couverture")
+    .then(response => response.json())
+    .then(data => {
+      setCoverImage(data.member[0]);
+    });
+
+  fetch("http://127.0.0.1:8000/api/images?type=bio&order%5BordreAffichage%5D=asc")
+    .then(response => response.json())
+    .then(data => {
+      setBioImages(data.member);
+    });
+
+    fetch("http://127.0.0.1:8000/api/texts")
+  .then(response => response.json())
+  .then(data => {
+    setTextes(data.member);
+  });
+}, []);
+
+
+
+  const bobImage = bioImages.find(
+  image => image.ordreAffichage === 1
+);
+
+const tomImage = bioImages.find(
+  image => image.ordreAffichage === 2
+);
+const bioBob = textes.find(
+  texte => texte.type === "BobBio"
+);
+
+const bioTom = textes.find(
+  texte => texte.type === "TomBio"
+);
+
   return (
+
+  
+
     <div>
       <div className="about-us-image-card">
-      <img className="image-about-us" src={ImageAboutUs} alt="Une photo sympathique de Bob et Tom"/>
+      {coverImage && (
+  <img className="image-about-us"
+    src={`http://127.0.0.1:8000/${coverImage.url}`}
+    alt={coverImage.description}
+    
+  />
+)}
       <Link className="btn-overlay" to="/contact">Contactez nous</Link>
       </div>
       <h1>Bob et Tom à votre service</h1>
     <div className="bob-card">
       <div className="bob-bio">
-      <h2>Bob</h2>
-      <p>Bob est un paysagiste expérimenté, reconnu pour son savoir-faire et son efficacité sur le terrain. Polyvalent et engagé, il intervient sur tous types de projets d’aménagement avec sérieux et professionnalisme. Son objectif : créer des espaces extérieurs fonctionnels, soignés et adaptés à chaque client.</p>
-      <p>Avec Tom, il a cofondé Canopées, une entreprise née de leur passion commune pour le paysage et leur envie de proposer des réalisations durables, alliant technique et sens esthétique.</p>
+      {bioBob && (
+  <>
+    <h2>{bioBob.titre}</h2>
+    <div dangerouslySetInnerHTML={{ __html: bioBob.contenu }} />
+  </>
+)}
       </div>
       <div className="bob-image">
-       <img  src={Bob} alt="Photo de Bob"/>
+        {bobImage && (
+    <img
+      src={`http://127.0.0.1:8000/${bobImage.url}`}
+      alt={bobImage.description}
+    />
+  )}
+      <div>
+  
+</div>
       </div>
     </div>
     <div className="tom-card">
       <div className="tom-bio">
-      <h2>Tom</h2>
-      <p>Passionné par la nature depuis toujours, Tom est un paysagiste rigoureux et créatif. Il aime transformer les espaces extérieurs en lieux harmonieux et vivants, en accord avec l’environnement. Grâce à son sens du détail et son écoute des besoins, il conçoit des jardins à la fois esthétiques et durables.</p>
-      <p>Co-fondateur de la société Canopées, il met son expertise au service de projets sur mesure, avec l’ambition de réinventer les espaces verts et de rapprocher chacun de la nature.</p>
+      {bioTom && (
+  <>
+    <h2>{bioTom.titre}</h2>
+    <div dangerouslySetInnerHTML={{ __html: bioTom.contenu }} />
+  </>
+)}
       </div>
       <div className="tom-image">
-       <img src={Tom} alt="Photo de Tom"/>
+        {tomImage && (
+    <img
+      src={`http://127.0.0.1:8000/${tomImage.url}`}
+      alt={tomImage.description}
+    />
+  )}
+     <div>
+  
+</div>
       </div>
 
     </div>

@@ -601,7 +601,8 @@ td:nth-child(2) {
   padding: 1rem;
   
   width: 700px;
-  height: 900px;
+  
+  height: auto;
   margin: 20px auto;
   border-radius: 5px;
   
@@ -619,7 +620,7 @@ label {
   font-family: "Inria Serif", serif;
   font-size: 2.25rem;
 }
-.form input, select
+.form input, select, textarea
  {
   padding: 10px;
    border: 1px solid #ccc;
@@ -627,6 +628,16 @@ label {
   color: #692b85;
   font-family: "Inria Serif", serif;
   font-size: 1.25rem;
+  resize: none;
+}
+
+textarea {
+  height: 10rem;
+}
+
+.summary {
+  color: white;
+  cursor: pointer;
 }
 
 .form button {

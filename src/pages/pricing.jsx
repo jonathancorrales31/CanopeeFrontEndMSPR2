@@ -1,35 +1,45 @@
-export default function Pricing() {
+import { useEffect, useState } from "react";
+
+
+
+export default function Pricing()
+
+
+{
+
+  
+  const [prestations, setPrestations] = useState([]);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/prestations")
+      .then(response => response.json())
+      .then(data => {
+        setPrestations(data.member);
+      })
+      .catch(error => {
+        console.error("Erreur API :", error);
+      });
+  }, []);
+
   return (
     <div>
      <h1>Nos tarifs</h1>
      <div className="prices-card">
       <label typeof="table" id="prices"/>
       <table>
+           <thead>
+            <tr>
+              <th>Prestation</th>
+              <th>Prix</th>
+            </tr>
+          </thead>
         <tbody>
-        <tr>
-          <th>Prestation</th>
-          <th>Prix</th>
-        </tr>
-        <tr>
-          <td>Conception et réalisation d'espaces verts</td>
-          <td>20€ à 50€/m²</td>
-        </tr>
-        <tr>
-          <td>Entretien des espaces verts</td>
-          <td>30€ à 40€/h</td>
-        </tr>
-        <tr>
-          <td>Taille des haies</td>
-          <td>8€ à 15€/m</td>
-        </tr>
-        <tr>
-          <td>Élagage et abattage d’arbres</td>
-          <td>120€ à 500€ /arbre</td>
-        </tr>
-        <tr>
-          <td>Valorisation des déchets verts (compostage)</td>
-          <td>40€ à 100€</td>
-        </tr>
+        {prestations.map((prestation) => (
+              <tr key={prestation.id}>
+                <td>{prestation.name}</td>
+                <td>{prestation.price}</td>
+              </tr>
+            ))}
        </tbody>
       </table>
      
